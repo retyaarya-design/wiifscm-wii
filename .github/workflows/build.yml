@@ -1,0 +1,24 @@
+name: Build Wii App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: devkitpro/devkitppc:latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Build
+        run: make
+      
+      - name: Upload boot.dol
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wii-FSCM
+          path: boot.dol
