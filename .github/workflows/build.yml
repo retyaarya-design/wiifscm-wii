@@ -11,11 +11,15 @@ jobs:
     container: devkitpro/devkitppc:latest
     
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Build
-        run: make
+      - name: Build boot.dol
+        run: |
+          cd source
+          powerpc-eabi-gcc -g -O2 -DGEKKO -I/opt/devkitpro/libogc/include main.c -o ../boot.elf -L/opt/devkitpro/libogc/lib/wii -L/opt/devkitpro/devkitPPC/powerpc-eabi/lib -lfat -logc -lm -lnetwork -lwiiuse -lbte
+          cd ..
+          powerpc-eabi-elf2dol boot.elf boot.dol
       
       - name: Upload boot.dol
         uses: actions/upload-artifact@v4
